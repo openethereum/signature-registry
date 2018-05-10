@@ -27,8 +27,9 @@ contract SignatureReg is Owned {
 	uint public totalSignatures = 0;
 
 	// allow only new calls to go in
-	modifier when_unregistered(bytes4 _signature) {
-		if (bytes(entries[_signature]).length != 0) return;
+	modifier whenUnregistered(bytes4 _signature) {
+		if (bytes(entries[_signature]).length != 0)
+			return;
 		_;
 	}
 
@@ -36,27 +37,25 @@ contract SignatureReg is Owned {
 	event Registered(address indexed creator, bytes4 indexed signature, string method);
 
 	// constructor with self-registration
-	function SignatureReg() {
-		register('register(string)');
+	constructor() public {
+		register("register(string)");
 	}
 
 	// registers a method mapping
-	function register(string _method) returns (bool) {
-		return _register(bytes4(sha3(_method)), _method);
-	}
-
-	// internal register function, signature => method
-	function _register(bytes4 _signature, string _method) internal when_unregistered(_signature) returns (bool) {
-		entries[_signature] = _method;
-		totalSignatures = totalSignatures + 1;
-		Registered(msg.sender, _signature, _method);
-		return true;
+	function register(string _method) public returns (bool) {
+		return _register(bytes4(keccak256(_method)), _method);
 	}
 
 	// in the case of any extra funds
-	function drain() only_owner {
-		if (!msg.sender.send(this.balance)) {
-			throw;
-		}
+	function drain() onlyOwner public {
+		msg.sender.transfer(address(this).balance);
+	}
+
+	// internal register function, signature => method
+	function _register(bytes4 _signature, string _method) whenUnregistered(_signature) internal returns (bool) {
+		entries[_signature] = _method;
+		totalSignatures = totalSignatures + 1;
+		emit Registered(msg.sender, _signature, _method);
+		return true;
 	}
 }
