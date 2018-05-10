@@ -7,3 +7,5 @@
 [travis-url]: https://travis-ci.org/parity-contracts/signature-registry
 [coveralls-image]: https://coveralls.io/repos/github/parity-contracts/signature-registry/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/parity-contracts/signature-registry?branch=master
+
+Solidity function signatures registry.
