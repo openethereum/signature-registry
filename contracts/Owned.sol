@@ -18,6 +18,8 @@ pragma solidity ^0.4.17;
 
 
 contract Owned {
+	address public owner = msg.sender;
+
 	modifier onlyOwner {
 		require(msg.sender == owner);
 		_;
@@ -25,10 +27,11 @@ contract Owned {
 
 	event NewOwner(address indexed old, address indexed current);
 
-	function setOwner(address _new) onlyOwner public {
+	function setOwner(address _new)
+		public
+		onlyOwner
+	{
 		emit NewOwner(owner, _new);
 		owner = _new;
 	}
-
-	address public owner = msg.sender;
 }

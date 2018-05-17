@@ -37,22 +37,34 @@ contract SignatureReg is Owned {
 	event Registered(address indexed creator, bytes4 indexed signature, string method);
 
 	// constructor with self-registration
-	constructor() public {
+	constructor()
+		public
+	{
 		register("register(string)");
 	}
 
 	// registers a method mapping
-	function register(string _method) public returns (bool) {
+	function register(string _method)
+		public
+		returns (bool)
+	{
 		return _register(bytes4(keccak256(_method)), _method);
 	}
 
 	// in the case of any extra funds
-	function drain() onlyOwner public {
+	function drain()
+		public
+		onlyOwner
+	{
 		msg.sender.transfer(address(this).balance);
 	}
 
 	// internal register function, signature => method
-	function _register(bytes4 _signature, string _method) whenUnregistered(_signature) internal returns (bool) {
+	function _register(bytes4 _signature, string _method)
+		internal
+		whenUnregistered(_signature)
+		returns (bool)
+	{
 		entries[_signature] = _method;
 		totalSignatures = totalSignatures + 1;
 		emit Registered(msg.sender, _signature, _method);
