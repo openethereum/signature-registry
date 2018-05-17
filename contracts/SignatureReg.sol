@@ -24,13 +24,6 @@ contract SignatureReg {
 	// the total count of registered signatures
 	uint public totalSignatures = 0;
 
-	// allow only new calls to go in
-	modifier whenUnregistered(bytes4 _signature) {
-		if (bytes(entries[_signature]).length != 0)
-			return;
-		_;
-	}
-
 	// dispatched when a new signature is registered
 	event Registered(address indexed creator, bytes4 indexed signature, string method);
 
@@ -52,9 +45,13 @@ contract SignatureReg {
 	// internal register function, signature => method
 	function _register(bytes4 _signature, string _method)
 		internal
-		whenUnregistered(_signature)
 		returns (bool)
 	{
+		// only allow new registrations
+		if (bytes(entries[_signature]).length != 0) {
+			return false;
+		}
+
 		entries[_signature] = _method;
 		totalSignatures = totalSignatures + 1;
 		emit Registered(msg.sender, _signature, _method);
