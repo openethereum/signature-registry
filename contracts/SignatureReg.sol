@@ -16,10 +16,8 @@
 
 pragma solidity ^0.4.1;
 
-import "./Owned.sol";
 
-
-contract SignatureReg is Owned {
+contract SignatureReg {
 	// mapping of signatures to entries
 	mapping (bytes4 => string) public entries;
 
@@ -49,14 +47,6 @@ contract SignatureReg is Owned {
 		returns (bool)
 	{
 		return _register(bytes4(keccak256(_method)), _method);
-	}
-
-	// in the case of any extra funds
-	function drain()
-		public
-		onlyOwner
-	{
-		msg.sender.transfer(address(this).balance);
 	}
 
 	// internal register function, signature => method
