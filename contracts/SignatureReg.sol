@@ -16,43 +16,42 @@
 
 pragma solidity ^0.4.1;
 
-import "./Owned.sol";
 
-
-contract SignatureReg is Owned {
+contract SignatureReg {
 	// mapping of signatures to entries
 	mapping (bytes4 => string) public entries;
 
 	// the total count of registered signatures
 	uint public totalSignatures = 0;
 
-	// allow only new calls to go in
-	modifier whenUnregistered(bytes4 _signature) {
-		if (bytes(entries[_signature]).length != 0)
-			return;
-		_;
-	}
-
 	// dispatched when a new signature is registered
 	event Registered(address indexed creator, bytes4 indexed signature, string method);
 
 	// constructor with self-registration
-	constructor() public {
+	constructor()
+		public
+	{
 		register("register(string)");
 	}
 
 	// registers a method mapping
-	function register(string _method) public returns (bool) {
+	function register(string _method)
+		public
+		returns (bool)
+	{
 		return _register(bytes4(keccak256(_method)), _method);
 	}
 
-	// in the case of any extra funds
-	function drain() onlyOwner public {
-		msg.sender.transfer(address(this).balance);
-	}
-
 	// internal register function, signature => method
-	function _register(bytes4 _signature, string _method) whenUnregistered(_signature) internal returns (bool) {
+	function _register(bytes4 _signature, string _method)
+		internal
+		returns (bool)
+	{
+		// only allow new registrations
+		if (bytes(entries[_signature]).length != 0) {
+			return false;
+		}
+
 		entries[_signature] = _method;
 		totalSignatures = totalSignatures + 1;
 		emit Registered(msg.sender, _signature, _method);
