@@ -14,18 +14,18 @@
 //! See the License for the specific language governing permissions and
 //! limitations under the License.
 
-pragma solidity ^0.4.1;
+pragma solidity ^0.4.22;
 
 
 contract SignatureReg {
+	// dispatched when a new signature is registered
+	event Registered(address indexed creator, bytes4 indexed signature, string method);
+
 	// mapping of signatures to entries
 	mapping (bytes4 => string) public entries;
 
 	// the total count of registered signatures
 	uint public totalSignatures = 0;
-
-	// dispatched when a new signature is registered
-	event Registered(address indexed creator, bytes4 indexed signature, string method);
 
 	// constructor with self-registration
 	constructor()
