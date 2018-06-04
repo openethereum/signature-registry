@@ -9,3 +9,18 @@
 [coveralls-url]: https://coveralls.io/github/parity-contracts/signature-registry?branch=master
 
 Decentralised registry of 4-bytes signatures to method mappings
+
+## Getting started
+
+This project uses the [Truffle](http://truffleframework.com/) framework. To install the required
+dependencies run:
+
+```
+yarn install
+```
+
+To run the test suite:
+
+```
+yarn test
+```
