@@ -39,7 +39,7 @@ contract SignatureReg {
 		public
 		returns (bool)
 	{
-		return _register(bytes4(keccak256(_method)), _method);
+		return _register(bytes4(keccak256(bytes(_method))), _method);
 	}
 
 	// internal register function, signature => method
