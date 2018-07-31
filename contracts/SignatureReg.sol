@@ -14,7 +14,7 @@
 //! See the License for the specific language governing permissions and
 //! limitations under the License.
 
-pragma solidity ^0.4.22;
+pragma solidity ^0.4.24;
 
 
 contract SignatureReg {
@@ -39,7 +39,7 @@ contract SignatureReg {
 		public
 		returns (bool)
 	{
-		return _register(bytes4(keccak256(_method)), _method);
+		return _register(bytes4(keccak256(bytes(_method))), _method);
 	}
 
 	// internal register function, signature => method
